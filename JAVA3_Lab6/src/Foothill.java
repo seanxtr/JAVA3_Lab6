@@ -1,6 +1,9 @@
 // CIS 1C Assignment #5
 // Part A
 
+// https://github.com/ivadenis/DataStructures-and-Algorithms/blob/master/Quadratic%20Probing/src/Client.java
+
+import cs_1c.*;
 
 class EBookCompInt implements Comparable<Integer> {
    int data;
@@ -63,64 +66,62 @@ public class Foothill
       // FHhashQPwFind< Integer, EBookCompInt> hashTable 
       //    = new FHhashQPwFind<Integer, EBookCompInt>();
       
-      FHhashQPwFind< String, EBookCompString> hashTable 
+      FHhashQPwFind<String, EBookCompString> hashTable 
          = new FHhashQPwFind<String, EBookCompString>();
 
-      //TODO:
-  
+      
       // create a QP hash table of EBooks ...
       // generate some random indices into the EBookEntryReader vector ...
       // insert all books into the hash table (if SORT_BY_ID) or fewer (If SORT_BY_CREATOR) ...
       // display NUM_RANDOM_INDICES books from array ...
       
-      //TODO:
+      EBookEntryReader book_input = new EBookEntryReader("catalog-short4.txt");
+
+      int array_size, k;
+      // how we test the success of the read:
+      if (book_input.readError()) {
+         System.out.println("couldn't open " + book_input.getFileName()
+            + " for input.");
+         return;
+      }
 
       // attempt to find on the selected key
       System.out.println( "The same random books from the hash table " );
-      for (int k = 0; k < NUM_RANDOM_INDICES; k++)
-      {
+      for (int k = 0; k < NUM_RANDOM_INDICES; k++) {
     		//TODO:
-         try
-         {
+         try {
             // bookResult = hashTable.find( 
             //    bookInput.getBook(randomIndices[k]).getCreator() );
             bookResult = hashTable.find( 
                bookInput.getBook(randomIndices[k]).getETextNum() );
-
          }
-         catch (NoSuchElementException e)
-         {
+         catch (NoSuchElementException e) {
         		//TODO:
          }
          System.out.println();
       }
       
       // test known successes failures exceptions:
-      try
-      {
+      try {
           // bookResult = hashTable.find( "Jack Kerouac" );
           bookResult = hashTable.find( -3 );
           
       	//TODO:
-          
       }
-      catch (NoSuchElementException e)
-      {
+      catch (NoSuchElementException e) {
       }
       
       // more failures
-      try
-      {
+      try {
+    	  
       }
-      catch (NoSuchElementException e)
-      {
+      catch (NoSuchElementException e) {
+    	  
       }
       
-      try
-      {
+      try {
       }
-      catch (NoSuchElementException e)
-      {
+      catch (NoSuchElementException e) {
       }
    } 
 }
