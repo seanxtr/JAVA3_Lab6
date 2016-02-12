@@ -1,14 +1,53 @@
 // CIS 1C Assignment #5
 // Part A
 
-// ----------- wrapper classes -------------
 
 class EBookCompInt implements Comparable<Integer> {
-	//TODO:
+   int data;
+   
+   public EBookCompInt(int e){
+      data = e;
+   }
+   
+   public String toString() {
+	   return String.format("%d", data);
+   }
+   
+   public int compareTo(Integer key) {
+      return data - key;
+   }
+   
+   public boolean equals(EBookCompInt rhs) {
+      return data == rhs.data;
+   }
+
+   public int hashCode() { 
+      return data;
+   } 
 }
 
 class EBookCompString implements Comparable<String> {
-	//TODO:
+   String data;
+   
+   public EBookCompString(String e){
+      data = e;
+   }
+   
+   public String toString() {
+      return data;
+   }
+   
+   public int compareTo(String key) {
+      return data == key ? 1 : 0;
+   }
+   
+   public boolean equals(EBookCompString rhs) {
+      return data == rhs.data;
+   }
+
+   public int hashCode() { 
+      return data.hashCode();
+   } 
 }
 
 //------------------------------------------------------
