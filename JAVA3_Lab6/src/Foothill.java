@@ -1,14 +1,13 @@
+// CIS 1C Assignment #5
+// Part A
+
 // ----------- wrapper classes -------------
 
-class EBookCompInt
-   implements Comparable<Integer>
-{
+class EBookCompInt implements Comparable<Integer> {
 	//TODO:
 }
 
-class EBookCompString 
-   implements Comparable<String>
-{
+class EBookCompString implements Comparable<String> {
 	//TODO:
 }
 
@@ -28,16 +27,15 @@ public class Foothill
       FHhashQPwFind< String, EBookCompString> hashTable 
          = new FHhashQPwFind<String, EBookCompString>();
 
-  	//TODO:
+      //TODO:
   
       // create a QP hash table of EBooks ...
       // generate some random indices into the EBookEntryReader vector ...
       // insert all books into the hash table (if SORT_BY_ID) or fewer (If SORT_BY_CREATOR) ...
       // display NUM_RANDOM_INDICES books from array ...
       
-  	//TODO:
- 
-      
+      //TODO:
+
       // attempt to find on the selected key
       System.out.println( "The same random books from the hash table " );
       for (int k = 0; k < NUM_RANDOM_INDICES; k++)
