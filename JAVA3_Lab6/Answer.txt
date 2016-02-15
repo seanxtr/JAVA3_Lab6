@@ -65,6 +65,9 @@ public class Foothill {
          = new FHhashQPwFind<Integer, EBookCompInt>();
       EBookCompString bookResult1;
       EBookCompInt bookResult2;
+      String searchKey1[] = new String[NUM_RANDOM_INDICES];
+      int searchKey2[] = new int[NUM_RANDOM_INDICES];
+      EBookEntry tmp = null;
       
       // test the success of the read
       if (book_input.readError()) {
@@ -74,39 +77,48 @@ public class Foothill {
       }
 
       // populate both hash tables
-      for(k = 0; k < book_input.getNumBooks(); k++) {
-         hashTableString.insert(new EBookCompString(book_input.getBook(k)));
-         hashTableInt.insert(new EBookCompInt(book_input.getBook(k)));
+      for(k = 0; k < NUM_RANDOM_INDICES; k++) {
+         tmp = book_input.getBook(
+            randomIndices(0, book_input.getNumBooks()));
+         searchKey1[k] = tmp.getCreator();
+         hashTableString.insert(new EBookCompString(tmp));
+         
+         tmp = book_input.getBook(
+            randomIndices(0, book_input.getNumBooks()));
+         searchKey2[k] = tmp.getETextNum();
+         hashTableInt.insert(new EBookCompInt(tmp));
       }
+      
+      // displace string hash table
+      System.out.println("Displace the hash table with string key:\n");
+      hashTableString.display();
       
       // attempt to find on the selected string key
       System.out.println( "Attempt to find on the selected string key:\n" );
       for (k = 0; k < NUM_RANDOM_INDICES; k++) {
-         String key = book_input.getBook(
-            randomIndices(0, book_input.getNumBooks())).getCreator();
          try {
-            bookResult1 = hashTableString.Find(key);
-            System.out.println(bookResult1.data.toString());
+            bookResult1 = hashTableString.Find(searchKey1[k]);
+            System.out.println(String.format("Found item with key %s", searchKey1[k]));
          }
          catch (NoSuchElementException e) {
-            System.out.println(String.format("Fail to find book by key %s",key));
+            System.out.println(String.format("Fail to find book by key %s",searchKey1[k]));
          }
-         System.out.println();
       }
+      
+      // displace string hash table
+      System.out.println("Displace the hash table with integer key:\n");
+      hashTableInt.display();
       
       // attempt to find on the selected integer key
       System.out.println( "Attempt to find on the selected integer key:\n" );
       for (k = 0; k < NUM_RANDOM_INDICES; k++) {
-         int key = book_input.getBook(
-            randomIndices(0, book_input.getNumBooks())).getETextNum();
          try {
-            bookResult2 = hashTableInt.Find(key);
-            System.out.println(bookResult2.data.toString());
+            bookResult2 = hashTableInt.Find(searchKey2[k]);
+            System.out.println(String.format("Found item with key %d", searchKey2[k]));
          }
          catch (NoSuchElementException e) {
-            System.out.println(String.format("Fail to find book by key %d",key));
+            System.out.println(String.format("Fail to find book by key %d",searchKey2[k]));
          }
-         System.out.println();
       }
       
       // test known successes failures exceptions:
@@ -127,8 +139,7 @@ public class Foothill {
       }
    }
    
-   static int randomIndices(int min, int max)
-   {
+   static int randomIndices(int min, int max) {
       Random rn = new Random();
       int range = max - min + 1;
       int randomNum =  rn.nextInt(range) + min;
@@ -194,364 +205,380 @@ public class FHhashQPwFind<KeyType, E extends Comparable<KeyType>>
       return index;
    }
 
+   /**
+    * Method to print out all object
+    */
+   public void display() {
+      for (int i = 0; i < mArray.length; i++) {
+         if (mArray[i].data != null) {
+            System.out.println("Array[ " + i + " ] " + mArray[i].data);
+         }
+      }
+   }
 }
-/******************* RUN **********************
-
-Attempt to find on the selected string key:
-
-   # 30026  ---------------
-   "A Story of One Short Life, 1783 to 1818"
-   by Stryker, Elisabeth G.
-   re: Mills, Samuel John, 1783-1818
 
 
+/********************* RUN **************************
 
-   # 28334  ---------------
-   "The New Hudson Shakespeare: Julius Cæsar"
-   by Shakespeare, William, 1564-1616
-   re: Tragedies
+Displace the hash table with string key:
 
-
-
-   # 19012  ---------------
-   "The Two-Gun Man"
-   by Seltzer, Charles Alden, 1875-1942
-   re: (no data found)
-
-
-
-   # 27237  ---------------
-   "An Essay on the Scriptural Doctrine of Immortality"
-   by Challis, James, 1803-1882
-   re: Immortality
-
-
-
-   # 26063  ---------------
-   "A Coin of Edward VIIA Detective Story"
-   by Hume, Fergus, 1859-1932
-   re: Detective and mystery stories
-
-
-
-   # 29767  ---------------
-   "The Continental Monthly, Vol. 4, No. 2, August, 1863Devoted to Literature and National Policy"
-   by Various
-   re: Literature, Modern -- 19th century -- Periodicals
-
-
-
-   # 30169  ---------------
-   "The Story of the White Mouse"
-   by Unknown
-   re: Conduct of life -- Juvenile fiction
-
-
-
-   # 28792  ---------------
-   "Omnilingual"
-   by Piper, H. Beam, 1904-1964
-   re: Science fiction
-
-
-
-   # 24073  ---------------
-   "General John Regan"
-   by Birmingham, George A., 1865-1950
-   re: Ireland -- Fiction
-
-
-
-   # 28041  ---------------
-   "Selections from the Poems and Plays of Robert Browning"
-   by Browning, Robert, 1812-1889
-   re: PR
-
-
-
-   # 28665  ---------------
-   "Sea Garden"
-   by H. D. (Hilda Doolittle), 1886-1961
-   re: Poetry
-
-
-
-   # 27083  ---------------
-   "The Subjection of Women"
-   by Mill, John Stuart, 1806-1873
-   re: Women -- Social and moral questions
-
-
-
-   # 29197  ---------------
-   "A Short History of Spain"
-   by Parmele, Mary Platt, 1843-1911
-   re: Spain -- History
-
-
-
-   # 25084  ---------------
-   "Bell's Cathedrals: The Cathedral Church of RochesterA Description of its Fabric and a Brief History of the Episcopal See"
-   by Palmer, G. H. (George Henry), 1871-
-   re: Rochester Cathedral (Rochester, Kent, England)
-
-
-
-   # 28065  ---------------
-   "The Pecan and its Culture"
-   by Hume, H. Harold (Hardrada Harold), 1875-1965
-   re: Pecan
-
-
-
-   # 24303  ---------------
-   "The Philadelphia Magazines and their Contributors 1741-1850"
-   by Smyth, Albert Henry, 1863-1907
-   re: American periodicals -- Pennsylvania -- Philadelphia
-
-
-
-   # 26844  ---------------
-   "Borneo and the Indian Archipelagowith drawings of costume and scenery"
-   by Marryat, Frank, 1826-1855
-   re: Malay Archipelago -- Description and travel
-
-
-
-   # 26230  ---------------
-   "The Picture of Dorian Gray"
-   by Wilde, Oscar, 1854-1900
-   re: Didactic fiction
-
-
-
-   # 22082  ---------------
-   "The Emancipation Proclamation"
-   by Lincoln, Abraham, 1809-1865
-   re: (no data found)
-
-
-
-   # 1290  ---------------
-   "Salammbo"
-   by Flaubert, Gustave, 1821-1880
+Array[ 1 ]    # 30090  ---------------
+   "Robinetta"
+   by Findlater, Mary, 1865-1963
    re: Fiction
 
 
-
-   # 26328  ---------------
-   "No. 4, Intercession: A Sermon Preached by the Rev. B. N. Michelson, B.A."
-   by Michelson, B. N.
-   re: Jewish sermons -- Great Britain
-
+Array[ 6 ]    # 25008  ---------------
+   "An Essay on the Lyric Poetry of the Ancients"
+   by Ogilvie, John, 1732-1813
+   re: Classical poetry -- History and criticism
 
 
-   # 29505  ---------------
-   "Suggestions to the Jewsfor improvement in reference to their charities, education,and general government"
-   by Faudel, Henry
-   re: Jews -- Charities
+Array[ 12 ]    # 19271  ---------------
+   "Dawn of a New Day"
+   by Shoghi Effendi, 1897-1957
+   re: (no data found)
 
 
-
-   # 29601  ---------------
-   "See?"
-   by Robles, Edward G.
-   re: Science fiction
-
+Array[ 13 ]    # 25143  ---------------
+   "The Curlytops and Their Playmatesor Jolly Times Through the Holidays"
+   by Garis, Howard Roger, 1873-1962
+   re: Brothers and sisters -- Juvenile fiction
 
 
-   # 27447  ---------------
-   "Mountain BloodA Novel"
-   by Hergesheimer, Joseph, 1880-1954
+Array[ 14 ]    # 23893  ---------------
+   "The Melting-Pot"
+   by Zangwill, Israel, 1864-1926
+   re: (no data found)
+
+
+Array[ 16 ]    # 29008  ---------------
+   "The Elm Tree Tales"
+   by Smith, F. Irene Burge (Frances Irene Burge), 1826-1900
    re: PS
 
 
+Array[ 17 ]    # 14573  ---------------
+   "The Truce of God"
+   by Rinehart, Mary Roberts, 1876-1958
+   re: Christmas stories
 
-   # 28832  ---------------
-   "The Sargasso of Space"
-   by Hamilton, Edmond, 1904-1977
+
+Array[ 26 ]    # 26671  ---------------
+   "The Boy CrusadersA Story of the Days of Louis IX."
+   by Edgar, John G. (John George), 1834-1864
+   re: Biographical fiction
+
+
+Array[ 44 ]    # 26020  ---------------
+   "Apis Mellificaor, The Poison of the Honey-Bee, Considered as a Therapeutic Agent"
+   by Wolf, C. W., -1866
+   re: Homeopathy
+
+
+Array[ 47 ]    # 27151  ---------------
+   "Memoirs and Correspondence of Admiral Lord de Saumarez. Vol II"
+   by Ross, John, Sir, 1777-1856
+   re: Saumarez, James, 1757-1836
+
+
+Array[ 58 ]    # 28288  ---------------
+   "Vanished towers and chimes of Flanders"
+   by Edwards, George Wharton, 1859-1950
+   re: Church buildings -- Flanders
+
+
+Array[ 62 ]    # 15909  ---------------
+   "The American Missionary — Volume 44, No. 01, January, 1890"
+   by Various
+   re: Congregational churches -- Missions -- Periodicals
+
+
+Array[ 63 ]    # 27864  ---------------
+   "Ainslee's, Vol. 15, No. 5, June 1905"
+   by Various
+   re: Short stories -- Periodicals
+
+
+Array[ 66 ]    # 27693  ---------------
+   "Little Folks (October 1884)A Magazine for the Young"
+   by Various
+   re: Children's periodicals, English
+
+
+Array[ 70 ]    # 27027  ---------------
+   "A Chronicle of London from 1089 to 1483Written in the Fifteenth Century, and for the First TimePrinted from MSS. in the British Museum"
+   by Anonymous
+   re: London (England) -- History -- To 1500
+
+
+Array[ 79 ]    # 27709  ---------------
+   "Five O'Clock TeaFarce"
+   by Howells, William Dean, 1837-1920
+   re: PS
+
+
+Array[ 80 ]    # 29570  ---------------
+   "Rope"
+   by Hall, Holworthy, 1887-1936
+   re: PS
+
+
+Array[ 81 ]    # 26852  ---------------
+   "The Blue Germ"
+   by Nicoll, Maurice, 1884-1953
    re: Science fiction
 
+
+Array[ 82 ]    # 29566  ---------------
+   "The Centurion's Story"
+   by Burrell, David James, 1844-1926
+   re: Christian fiction
+
+
+Array[ 83 ]    # 26296  ---------------
+   "Arabian nights. French"
+   by (no data found)
+   re: Fairy tales
+
+
+Array[ 84 ]    # 30024  ---------------
+   "The Fisher-Boy Urashima"
+   by (no data found)
+   re: Fairy tales
+
+
+Array[ 87 ]    # 27351  ---------------
+   "Jeremiah : Being The Baird Lecture for 1922"
+   by Smith, George Adam, Sir, 1856-1942
+   re: Jeremiah (Biblical prophet)
+
+
+Array[ 88 ]    # 30251  ---------------
+   "Disqualified"
+   by Fontenay, Charles Louis, 1917-2007
+   re: Science fiction
+
+
+Array[ 95 ]    # 21495  ---------------
+   "To The West"
+   by Fenn, George Manville, 1831-1909
+   re: (no data found)
+
+
+Array[ 96 ]    # 29256  ---------------
+   "High Finance"
+   by Kahn, Otto Hermann, 1867-1934
+   re: Capital
+
+
+Attempt to find on the selected string key:
+
+Found item with key Various
+Found item with key Kahn, Otto Hermann, 1867-1934
+Found item with key Howells, William Dean, 1837-1920
+Found item with key Ogilvie, John, 1732-1813
+Found item with key Shoghi Effendi, 1897-1957
+Found item with key Smith, F. Irene Burge (Frances Irene Burge), 1826-1900
+Found item with key Fenn, George Manville, 1831-1909
+Found item with key Rinehart, Mary Roberts, 1876-1958
+Found item with key Edgar, John G. (John George), 1834-1864
+Found item with key (no data found)
+Found item with key Anonymous
+Found item with key Smith, George Adam, Sir, 1856-1942
+Found item with key (no data found)
+Found item with key Wolf, C. W., -1866
+Found item with key Garis, Howard Roger, 1873-1962
+Found item with key Zangwill, Israel, 1864-1926
+Found item with key Edwards, George Wharton, 1859-1950
+Found item with key Hall, Holworthy, 1887-1936
+Found item with key Ross, John, Sir, 1777-1856
+Found item with key Findlater, Mary, 1865-1963
+Found item with key Various
+Found item with key Nicoll, Maurice, 1884-1953
+Found item with key Burrell, David James, 1844-1926
+Found item with key Fontenay, Charles Louis, 1917-2007
+Found item with key Various
+Displace the hash table with integer key:
+
+Array[ 0 ]    # 28906  ---------------
+   "The Tale of Timber Town"
+   by Grace, Alfred A. (Alfred Augustus), 1867-1942
+   re: PR
+
+
+Array[ 1 ]    # 17461  ---------------
+   "The Great German Composers"
+   by Ferris, George T. (George Titus), 1840-
+   re: (no data found)
+
+
+Array[ 2 ]    # 4851  ---------------
+   "History of the United Netherlands, 1587a"
+   by Motley, John Lothrop, 1814-1877
+   re: Netherlands -- History -- Wars of Independence, 1556-1648
+
+
+Array[ 3 ]    # 5920  ---------------
+   "The History of Don Quixote, Volume 1, Part 18"
+   by Cervantes Saavedra, Miguel de, 1547-1616
+   re: Spain -- Social life and customs -- 16th century -- Fiction
+
+
+Array[ 4 ]    # 25802  ---------------
+   "Ruth Fielding on the St. LawrenceThe Queer Old Man of the Thousand Islands"
+   by Emerson, Alice B.
+   re: Orphans -- Juvenile fiction
+
+
+Array[ 8 ]    # 14849  ---------------
+   "Leaves of LifeFor Daily Inspiration"
+   by Steinmetz, Margaret Bird
+   re: (no data found)
+
+
+Array[ 11 ]    # 28820  ---------------
+   "Counsel for the Defense"
+   by Scott, Leroy, 1875-1929
+   re: PS
+
+
+Array[ 13 ]    # 3311  ---------------
+   "The Californiacs"
+   by Gillmore, Inez Haynes, 1873-1970
+   re: California -- Description and travel
+
+
+Array[ 16 ]    # 25042  ---------------
+   "Color Value"
+   by Clifford, C. R. (Chandler Robbins), 1858-1935
+   re: Interior decoration
+
+
+Array[ 17 ]    # 26691  ---------------
+   "Sanctification"
+   by Byers, J. W.
+   re: Sanctification
+
+
+Array[ 22 ]    # 27182  ---------------
+   "More Peers : Verses"
+   by Belloc, Hilaire, 1870-1953
+   re: Nonsense verses
+
+
+Array[ 34 ]    # 26612  ---------------
+   "A Pirate of Parts"
+   by Neville, Richard
+   re: Theater -- Fiction
+
+
+Array[ 36 ]    # 25838  ---------------
+   "Fair MargaretA Portrait"
+   by Crawford, F. Marion (Francis Marion), 1854-1909
+   re: PS
+
+
+Array[ 47 ]    # 11105  ---------------
+   "Jack Mason, the Old Sailor"
+   by Woodworth, Francis C. (Francis Channing), 1812-1859
+   re: (no data found)
+
+
+Array[ 48 ]    # 24783  ---------------
+   "The Pirate's Pocket Book"
+   by Calthrop, Dion Clayton, 1878-1937
+   re: Wit and humor
+
+
+Array[ 49 ]    # 19352  ---------------
+   "Herbal Simples Approved for Modern Uses of Cure"
+   by Fernie, William Thomas, 1830-
+   re: Botany, Medical
+
+
+Array[ 56 ]    # 347  ---------------
+   "Grettir the Strong, Icelandic Saga"
+   by Unknown
+   re: Vikings -- Fiction
+
+
+Array[ 66 ]    # 11512  ---------------
+   "O. Henry Memorial Award Prize Stories of 1921"
+   by Various
+   re: (no data found)
+
+
+Array[ 67 ]    # 29263  ---------------
+   "The Autobiography of Sergeant William LawrenceA Hero of the Peninsular and Waterloo Campaigns"
+   by Lawrence, William, 1791-1867
+   re: Great Britain. Army -- Military life
+
+
+Array[ 68 ]    # 26064  ---------------
+   "Problems of ExpansionAs Considered In Papers and Addresses"
+   by Reid, Whitelaw, 1837-1912
+   re: United States -- Colonial question
+
+
+Array[ 69 ]    # 13940  ---------------
+   "The Problem of China"
+   by Russell, Bertrand, 1872-1970
+   re: (no data found)
+
+
+Array[ 71 ]    # 28876  ---------------
+   "History Of Egypt, Chaldæa, Syria, Babylonia, And AssyriaA Linked Index to the Project Gutenberg Editions"
+   by Maspero, G. (Gaston), 1846-1916
+   re: History, Ancient
+
+
+Array[ 90 ]    # 28705  ---------------
+   "The God in the Box"
+   by Wright, Sewell Peaslee, 1897-1970
+   re: Science fiction
+
+
+Array[ 92 ]    # 20947  ---------------
+   "Memoirs of the Jacobites of 1715 and 1745Volume II."
+   by Thomson, Mrs.
+   re: (no data found)
+
+
+Array[ 96 ]    # 26189  ---------------
+   "A Spoil of OfficeA Story of the Modern West"
+   by Garland, Hamlin, 1860-1940
+   re: Farmers -- Fiction
 
 
 Attempt to find on the selected integer key:
 
-   # 29504  ---------------
-   "What's He Doing in There?"
-   by Leiber, Fritz, 1910-1992
-   re: Science fiction
-
-
-
-   # 27817  ---------------
-   "GyciaA Tragedy in Five Acts"
-   by Morris, Lewis, Sir, 1833-1907
-   re: Drama
-
-
-
-   # 28440  ---------------
-   "The Dark Star"
-   by Chambers, Robert W. (Robert William), 1865-1933
-   re: PS
-
-
-
-   # 26623  ---------------
-   "The Brass Bellor, The Chariot of Death"
-   by Sue, Eugène, 1804-1857
-   re: Gaul -- History -- 58 B.C.-511 A.D. -- Fiction
-
-
-
-   # 27098  ---------------
-   "Technology and Books for All"
-   by Lebert, Marie
-   re: (no data found)
-
-
-
-   # 26524  ---------------
-   "The Huguenots in France"
-   by Smiles, Samuel, 1812-1904
-   re: Huguenots
-
-
-
-   # 29009  ---------------
-   "Harper's Young People, June 22, 1880An Illustrated Weekly"
-   by Various
-   re: Children's periodicals, American
-
-
-
-   # 14416  ---------------
-   "Stories of the Border Marches"
-   by Lang, Jeanie
-   re: Scottish Borders (Scotland) -- Fiction
-
-
-
-   # 28521  ---------------
-   "The Power of MesmerismA Highly Erotic Narrative of Voluptuous Facts and Fancies"
-   by Anonymous
-   re: Erotic stories
-
-
-
-   # 27056  ---------------
-   "Louis XIV.Makers of History Series"
-   by Abbott, John S. C. (John Stevens Cabot), 1805-1877
-   re: France -- History -- Louis XIV, 1643-1715
-
-
-
-   # 25683  ---------------
-   "The Escape of a Princess PatBeing the full account of the capture and fifteen months'imprisonment of Corporal Edwards, of the Princess Patricia'sCanadian Light Infantry, and his final escape from Germanyinto Holland"
-   by Pearson, George
-   re: World War, 1914-1918 -- Prisoners and prisons, German
-
-
-
-   # 29700  ---------------
-   "Poetical Works of William Cullen BryantHousehold Edition"
-   by Bryant, William Cullen, 1794-1878
-   re: Poetry
-
-
-
-   # 26437  ---------------
-   "The Rubaiyat of a Huffy Husband"
-   by Little, Mary Wallace Bundy, 1857-
-   re: Omar Khayyam -- Parodies, imitations, etc.
-
-
-
-   # 27698  ---------------
-   "System der volkswirthschaft. English"
-   by Roscher, Wilhelm, 1817-1894
-   re: Economics
-
-
-
-   # 23904  ---------------
-   "The Open Library"
-   by Kahle, Brewster, 1960-
-   re: (no data found)
-
-
-
-   # 22573  ---------------
-   "Punch, or the London Charivari, Vol. 146, February 11, 1914"
-   by Various
-   re: English wit and humor -- Periodicals
-
-
-
-   # 4790  ---------------
-   "Half a Rogue"
-   by MacGrath, Harold, 1871-1932
-   re: Fiction
-
-
-
-   # 28402  ---------------
-   "The Sexual Life of the Child"
-   by Moll, Albert, 1862-1939
-   re: Sex instruction
-
-
-
-   # 26365  ---------------
-   "Intestinal IllsChronic Constipation, Indigestion, Autogenetic Poisons, Diarrhea, Piles, Etc. Also Auto-Infection, Auto-Intoxication, Anemia, Emaciation, Etc. Due to Proctitis and Colitis"
-   by Jamison, Alcinous B. (Alcinous Burton), 1851-
-   re: Intestines -- Diseases
-
-
-
-   # 29195  ---------------
-   "It's All Yours"
-   by Merwin, Sam, 1910-1996
-   re: Science fiction
-
-
-
-   # 10935  ---------------
-   "The Wonderful Adventures of Nils"
-   by Lagerlöf, Selma, 1858-1940
-   re: (no data found)
-
-
-
-   # 27356  ---------------
-   "ChelseaThe Fascination of London"
-   by Mitton, G. E. (Geraldine Edith)
-   re: Chelsea (London, England) -- Description and travel
-
-
-
-   # 29307  ---------------
-   "North American Medical and Surgical Journal, Vol. 2, No. 3, July, 1826"
-   by Various
-   re: Medicine -- Periodicals
-
-
-
-   # 26040  ---------------
-   "Log-book of Timothy BoardmanKept On Board The Privateer Oliver Cromwell, During ACruise From New London, Ct., to Charleston, S. C., AndReturn, In 1778; Also, A Biographical Sketch of The Author."
-   by Boardman, Timothy, 1754-1838
-   re: Oliver Cromwell (Ship)
-
-
-
-   # 28724  ---------------
-   "In the High ValleyBeing the fifth and last volume of the Katy Did series"
-   by Coolidge, Susan, 1835-1905
-   re: PZ
-
-
-
+Found item with key 11105
+Found item with key 20947
+Found item with key 3311
+Found item with key 28906
+Found item with key 28820
+Found item with key 24783
+Found item with key 25838
+Found item with key 17461
+Found item with key 25042
+Found item with key 28705
+Found item with key 5920
+Found item with key 13940
+Found item with key 25802
+Found item with key 19352
+Found item with key 27182
+Found item with key 11512
+Found item with key 347
+Found item with key 26189
+Found item with key 26064
+Found item with key 26612
+Found item with key 14849
+Found item with key 29263
+Found item with key 26691
+Found item with key 28876
+Found item with key 4851
 Fail to find book by key -3
 Fail to find book by key Jack Kerouac
 
-***********************************************/
+****************************************************/

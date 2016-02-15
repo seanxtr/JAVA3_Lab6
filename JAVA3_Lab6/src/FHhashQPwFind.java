@@ -56,4 +56,14 @@ public class FHhashQPwFind<KeyType, E extends Comparable<KeyType>>
       return index;
    }
 
+   /**
+    * Method to print out all object
+    */
+   public void display() {
+      for (int i = 0; i < mArray.length; i++) {
+         if (mArray[i].data != null) {
+            System.out.println("Array[ " + i + " ] " + mArray[i].data);
+         }
+      }
+   }
 }

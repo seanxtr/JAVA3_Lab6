@@ -65,6 +65,9 @@ public class Foothill {
          = new FHhashQPwFind<Integer, EBookCompInt>();
       EBookCompString bookResult1;
       EBookCompInt bookResult2;
+      String searchKey1[] = new String[NUM_RANDOM_INDICES];
+      int searchKey2[] = new int[NUM_RANDOM_INDICES];
+      EBookEntry tmp = null;
       
       // test the success of the read
       if (book_input.readError()) {
@@ -74,39 +77,48 @@ public class Foothill {
       }
 
       // populate both hash tables
-      for(k = 0; k < book_input.getNumBooks(); k++) {
-         hashTableString.insert(new EBookCompString(book_input.getBook(k)));
-         hashTableInt.insert(new EBookCompInt(book_input.getBook(k)));
+      for(k = 0; k < NUM_RANDOM_INDICES; k++) {
+         tmp = book_input.getBook(
+            randomIndices(0, book_input.getNumBooks()));
+         searchKey1[k] = tmp.getCreator();
+         hashTableString.insert(new EBookCompString(tmp));
+         
+         tmp = book_input.getBook(
+            randomIndices(0, book_input.getNumBooks()));
+         searchKey2[k] = tmp.getETextNum();
+         hashTableInt.insert(new EBookCompInt(tmp));
       }
+      
+      // displace string hash table
+      System.out.println("Displace the hash table with string key:\n");
+      hashTableString.display();
       
       // attempt to find on the selected string key
       System.out.println( "Attempt to find on the selected string key:\n" );
       for (k = 0; k < NUM_RANDOM_INDICES; k++) {
-         String key = book_input.getBook(
-            randomIndices(0, book_input.getNumBooks())).getCreator();
          try {
-            bookResult1 = hashTableString.Find(key);
-            System.out.println(bookResult1.data.toString());
+            bookResult1 = hashTableString.Find(searchKey1[k]);
+            System.out.println(String.format("Found item with key %s", searchKey1[k]));
          }
          catch (NoSuchElementException e) {
-            System.out.println(String.format("Fail to find book by key %s",key));
+            System.out.println(String.format("Fail to find book by key %s",searchKey1[k]));
          }
-         System.out.println();
       }
+      
+      // displace string hash table
+      System.out.println("Displace the hash table with integer key:\n");
+      hashTableInt.display();
       
       // attempt to find on the selected integer key
       System.out.println( "Attempt to find on the selected integer key:\n" );
       for (k = 0; k < NUM_RANDOM_INDICES; k++) {
-         int key = book_input.getBook(
-            randomIndices(0, book_input.getNumBooks())).getETextNum();
          try {
-            bookResult2 = hashTableInt.Find(key);
-            System.out.println(bookResult2.data.toString());
+            bookResult2 = hashTableInt.Find(searchKey2[k]);
+            System.out.println(String.format("Found item with key %d", searchKey2[k]));
          }
          catch (NoSuchElementException e) {
-            System.out.println(String.format("Fail to find book by key %d",key));
+            System.out.println(String.format("Fail to find book by key %d",searchKey2[k]));
          }
-         System.out.println();
       }
       
       // test known successes failures exceptions:
@@ -127,8 +139,7 @@ public class Foothill {
       }
    }
    
-   static int randomIndices(int min, int max)
-   {
+   static int randomIndices(int min, int max) {
       Random rn = new Random();
       int range = max - min + 1;
       int randomNum =  rn.nextInt(range) + min;
