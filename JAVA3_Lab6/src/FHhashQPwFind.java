@@ -1,19 +1,31 @@
+//------------ Class FHhashQPwFind Definition ---------------
 import cs_1c.*;
 import java.util.*;
 
-//------------ Class FHhashQPwFind Definition ---------------
-public class FHhashQPwFind<KeyType, E extends Comparable<KeyType> >
-extends FHhashQP<E> {
+public class FHhashQPwFind<KeyType, E extends Comparable<KeyType>>
+   extends FHhashQP<E> {
 
+   /**
+    * Method to find data by key
+    * @param key      target key
+    * @return         the object
+    */
    public E Find(KeyType key) {
+      // find the location
       int pos = findPosKey(key);
-      if (mArray[pos].state == ACTIVE)
-         return mArray[pos].data;
-      else 
+      
+      // check if the object is deleted
+      if (mArray[pos].state != ACTIVE)
          throw new NoSuchElementException();
+      
+      return mArray[pos].data;
    }
    
-   // uses the key rather than the object, to hash.
+   /**
+    * Use the key to hash
+    * @param key      the key that will be hashed
+    * @return         hash result
+    */
    protected int myHashKey(KeyType key) {
       int hashVal;
 
@@ -24,13 +36,17 @@ extends FHhashQP<E> {
       return hashVal;
    }
    
-   // uses the key rather than the object, to get a position.
+   /**
+    * Use the key to find the position of object that match the key
+    * @param key      target key
+    * @return         object position
+    */
    protected int findPosKey(KeyType key){
       int kthOddNum = 1;
       int index = myHashKey(key);
 
       while ( mArray[index].state != EMPTY
-         && !mArray[index].data.equals(key) )
+         && mArray[index].data.compareTo(key) != 0)
       {
          index += kthOddNum; // k squared = (k-1) squared + kth odd #
          kthOddNum += 2;     // compute next odd #
